@@ -3,8 +3,12 @@ import threading
 import sys
 import os
 
+# Implement fernet 
+from cryptography.fernet import Fernet
+
+
 class Server():
-  
+
    def __init__(self, Host, Port):
     
      self.__Host = Host
@@ -19,7 +23,9 @@ class Server():
 
                data = conn.recv(1024)
                
-               decode_msg = data.decode('utf-8')
+               # decode_msg = data.decode('utf-8')
+               print(f'Raw data {data}')
+               decode_msg = data.decrypt(data).decode(0)
 
                print(f"{decode_msg}", end='')
 
@@ -70,10 +76,16 @@ class Server():
 
 if __name__ == '__main__':
   
-  Host = "0.0.0.0"
-  Port = 4444
-  server = Server(Host, Port)
+   Host = "0.0.0.0"
+   Port = 4444
 
-  server.start_server()
+   # load the key
+   KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
+   crypt = Fernet(KEY)
+
+
+   server = Server(Host, Port)
+
+   server.start_server()
   
 
