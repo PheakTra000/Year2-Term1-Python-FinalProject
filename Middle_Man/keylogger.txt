@@ -1,1 +1,5 @@
 r
+hi
+hello
+joke
+c

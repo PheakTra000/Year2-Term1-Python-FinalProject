@@ -25,7 +25,7 @@ class Server():
                
                # decode_msg = data.decode('utf-8')
                print(f'Raw data {data}')
-               decode_msg = data.decrypt(data).decode()
+               decode_msg = crypt.decrypt(data).decode('utf-8')
 
                print(f"{decode_msg}", end='')
 
