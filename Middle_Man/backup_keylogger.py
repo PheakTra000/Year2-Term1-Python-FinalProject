@@ -74,9 +74,8 @@ if __name__ == '__main__':
 				l.join()
 
 	except KeyboardInterrupt:
-			
+
 				l.stop()
-				print("We are done here")
-	
+
 
 

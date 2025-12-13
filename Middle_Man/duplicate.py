@@ -2,9 +2,9 @@ import shutil
 from pathlib import Path
 
 # The source of the file
-source_file = Path("server.py")
+source_file = Path("keylogger.py")
 # duplciated file, originated from the source
-destination_file = "backup.py"
+destination_file = "backup_keylogger.py"
 
 
 try:

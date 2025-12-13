@@ -70,6 +70,7 @@ class Server():
 
 if __name__ == '__main__':
   
+  os.system('neofetch')  
   Host = "0.0.0.0"
   Port = 4444
   server = Server(Host, Port)
