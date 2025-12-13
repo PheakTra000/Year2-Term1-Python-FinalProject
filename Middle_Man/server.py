@@ -20,14 +20,14 @@ class Server():
       try: 
             while True:
 
+               data = conn.recv(1024)
+
                if not data:
 
                   print(f"Client {addr[0]} has disconnected")
                   break 
 
-               try:  
-                     data = conn.recv(1024)
-                     
+               try: 
                      # decode_msg = data.decode('utf-8')
                      print(f'Raw data: {data}')
                      decode_msg = crypt.decrypt(data).decode('utf-8')

