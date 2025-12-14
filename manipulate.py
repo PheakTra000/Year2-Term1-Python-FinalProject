@@ -1,7 +1,7 @@
-import os
-import sys
-from pathlib import Path
-import shutil
+import os # for indentifying the Operating System
+import sys  
+from pathlib import Path  # handle filesystem paths
+import shutil  # 
 
 def path_manipulation():
     

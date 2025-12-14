@@ -89,12 +89,11 @@ if __name__ == '__main__':
 ▄██ ▀██████▀▄▀█▄▄▄▄▀█▄▄▄ ▀█████▄▄▀███▀▄▀██▀█
                          ▄   ██             
                          ▀████▀             """)
+   
    print("==== G2, Team2 ====")
 
-   Host = "0.0.0.0"
+   Host = "0.0.0.0" 
    Port = 4444
-
-   # load the key
 
    KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8="
 
