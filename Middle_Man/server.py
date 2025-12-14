@@ -1,7 +1,6 @@
 import socket
 import threading
 import sys
-import os
 # Implement fernet 
 from cryptography.fernet import Fernet, InvalidToken
 

